@@ -12,7 +12,6 @@ const connectTestDB = async () => {
     const conn = await mongoose.connect(process.env.MONGO_URI, {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
-      family: 4, // Use IPv4, skip trying IPv6
     });
     console.log(`✅ Test DB Connected: ${conn.connection.host}`);
     console.log(`📁 Test Database: ${conn.connection.name}`);
@@ -28,11 +27,11 @@ const connectTestDB = async () => {
 // Connection for Scholarship database
 const connectScholarshipDB = async () => {
   try {
-    const conn = await mongoose.createConnection(process.env.SCHOLARSHIP_URI, {
+    const conn = mongoose.createConnection(process.env.SCHOLARSHIP_URI, {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
-      family: 4,
     });
+    await conn.asPromise();
     console.log(`✅ Scholarship DB Connected: ${conn.host}`);
     console.log(`📁 Scholarship Database: ${conn.name}`);
     return conn;

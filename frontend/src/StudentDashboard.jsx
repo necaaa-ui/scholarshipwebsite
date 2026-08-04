@@ -50,6 +50,7 @@ export default function StudentDashboard() {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [accessDenied, setAccessDenied] = useState('');
   const [stats, setStats] = useState(null);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -64,6 +65,7 @@ export default function StudentDashboard() {
   const fetchApplications = async () => {
     try {
       setLoading(true);
+      setAccessDenied('');
       
       if (!email) {
         setError('Email not provided');
@@ -106,6 +108,10 @@ export default function StudentDashboard() {
         setUser(data.user);
         setTotalItems(processedApps.length);
         setCurrentPage(1);
+      } else if (data.isAdmin) {
+        navigate('/admin');
+      } else if (response.status === 403) {
+        setAccessDenied(data.message || 'Only current 2nd year students can access this dashboard.');
       } else {
         setError('Failed to fetch applications: ' + (data.message || 'Unknown error'));
       }
@@ -306,6 +312,18 @@ export default function StudentDashboard() {
             <ArrowLeft size={16} />
             Back to Application
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (accessDenied) {
+    return (
+      <div className="student-error-container">
+        <div className="error-content">
+          <AlertOctagon size={48} color="#dc2626" />
+          <h2>Not Eligible for Scholarship Dashboard</h2>
+          <p>{accessDenied}</p>
         </div>
       </div>
     );

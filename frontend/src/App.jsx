@@ -155,6 +155,11 @@ function AICTEFeeWaiverForm() {
     return '';
   };
 
+  const getAcademicYearLabel = (academicYear) => {
+    const suffix = { 1: 'st', 2: 'nd', 3: 'rd', 4: 'th' }[academicYear];
+    return suffix ? `${academicYear}${suffix} Year` : 'an unknown year';
+  };
+
   // Check user eligibility based on fetched data
   const checkUserEligibility = (user) => {
     let isEligible = true;
@@ -179,11 +184,18 @@ function AICTEFeeWaiverForm() {
       isEligible = false;
       reasons.push('Graduation year information is missing');
     }
+
+    if (!user.isSecondYear) {
+      isEligible = false;
+      reasons.push(`Only 2nd year students are eligible. This student is in ${getAcademicYearLabel(user.academicYear)}.`);
+    }
     
     const eligibilityResult = {
       isEligible,
       reasons,
       graduationYear,
+      academicYear: user.academicYear,
+      isSecondYear: user.isSecondYear,
       branch,
       fullName: user.fullName,
       isCurrentlyStudying: user.isCurrentlyStudying
@@ -255,6 +267,13 @@ function AICTEFeeWaiverForm() {
         const user = data.user;
         console.log('✅ User found:', user.fullName);
         
+        if (user.isAdmin) {
+          setIsFetching(false);
+          isFetchingRef.current = false;
+          navigate('/admin');
+          return user;
+        }
+
         setFetchedUser(user);
         setUserNotFound(false);
         setAutoFetched(true);
@@ -598,6 +617,11 @@ function AICTEFeeWaiverForm() {
     if (fetchedUser && !fetchedUser.isCurrentlyStudying) {
       isEligible = false;
       reasons.push(`Student is not currently studying (Graduation year: ${fetchedUser.graduationYear || 'Unknown'})`);
+    }
+
+    if (fetchedUser && !fetchedUser.isSecondYear) {
+      isEligible = false;
+      reasons.push(`Only 2nd year students are eligible. This student is in ${getAcademicYearLabel(fetchedUser.academicYear)}.`);
     }
 
     return {

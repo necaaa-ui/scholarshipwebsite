@@ -1,4 +1,17 @@
 const mongoose = require('mongoose');
+const User = require('../models/User');
+
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const getAcademicYearFromLabel = (label) => {
+  const graduationYearMatch = label?.match(/\d{4}/);
+  if (!graduationYearMatch) return null;
+
+  const yearsUntilGraduation = Number(graduationYearMatch[0]) - new Date().getFullYear();
+  const academicYearByRemainingYears = { 4: 1, 3: 2, 2: 3, 1: 4 };
+
+  return academicYearByRemainingYears[yearsUntilGraduation] || null;
+};
 
 // Get models from global
 const getModels = () => {
@@ -62,6 +75,20 @@ exports.saveScholarship = async (req, res) => {
     const { Scholarship, FamilyMember, ScholarshipDetail } = getModels();
     
     const formData = req.body;
+    const email = formData.email?.trim();
+    const user = email
+      ? await User.collection.findOne({
+          'basic.email_id': { $regex: new RegExp(`^${escapeRegex(email)}$`, 'i') }
+        })
+      : null;
+    const academicYear = getAcademicYearFromLabel(user?.basic?.label);
+
+    if (academicYear !== 2) {
+      return res.status(403).json({
+        success: false,
+        message: 'You are not eligible for this scholarship. Only 2nd year students can apply.'
+      });
+    }
     console.log('📝 Received form data');
     
     // Generate application ID FIRST

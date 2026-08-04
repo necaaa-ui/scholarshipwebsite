@@ -1,6 +1,21 @@
 // D:\Scholar_ship\scholarship\backend\controllers\studentController.js
 
 const mongoose = require('mongoose');
+const User = require('../models/User');
+
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const getAcademicYearFromLabel = (label) => {
+  const graduationYearMatch = label?.match(/\d{4}/);
+  if (!graduationYearMatch) return null;
+
+  const yearsUntilGraduation = Number(graduationYearMatch[0]) - new Date().getFullYear();
+  return { 4: 1, 3: 2, 2: 3, 1: 4 }[yearsUntilGraduation] || null;
+};
+
+const findMemberByEmail = async (email) => User.collection.findOne({
+  'basic.email_id': { $regex: new RegExp(`^${escapeRegex(email)}$`, 'i') }
+});
 
 // Get models from global or from the scholarship connection
 const getModels = () => {
@@ -103,6 +118,25 @@ exports.getStudentApplications = async (req, res) => {
     const decodedEmail = decodeURIComponent(email);
     console.log('📧 Email:', decodedEmail);
 
+    const member = await findMemberByEmail(decodedEmail);
+    const isAdmin = member?.basic?.label?.trim().toLowerCase() === 'admin';
+    const academicYear = getAcademicYearFromLabel(member?.basic?.label);
+
+    if (isAdmin) {
+      return res.status(403).json({
+        success: false,
+        isAdmin: true,
+        message: 'Admin users must use the admin dashboard.'
+      });
+    }
+
+    if (academicYear !== 2) {
+      return res.status(403).json({
+        success: false,
+        message: 'You are not eligible for this scholarship dashboard. Only current 2nd year students can access it.'
+      });
+    }
+
     let Scholarship;
     try {
       const models = getModels();
@@ -125,7 +159,17 @@ exports.getStudentApplications = async (req, res) => {
 
     console.log(`✅ Found ${applications.length} applications`);
 
-    let user = null;
+    let user = {
+      personalDetails: {
+        name: member.basic?.name || 'Student',
+        email: member.basic?.email_id || decodedEmail,
+        mobileNumber: member.contact_details?.mobile || ''
+      },
+      additionalPersonalDetails: {
+        department: member.basic?.label?.split(',')[1]?.trim() || '',
+        year: '2nd Year'
+      }
+    };
     if (applications.length > 0) {
       const firstApp = applications[0];
       user = {

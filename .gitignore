@@ -1,0 +1,10 @@
+# Environment configuration and runtime logs must remain local.
+backend/.env
+backend/server.log
+backend/server.err.log
+
+# Dependencies and generated files
+node_modules/
+dist/
+build/
+*.log
