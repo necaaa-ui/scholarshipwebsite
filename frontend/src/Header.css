@@ -1,0 +1,280 @@
+/* src/Header.css - Updated with Gradient Theme */
+
+.dashboard-header {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 30%, #4f46e5 60%, #4338ca 100%);
+  padding: 16px 24px;
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.15);
+  margin-top: 0;
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 0;
+}
+
+.logo-side {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.left-logo {
+  justify-content: flex-start;
+  margin-right: 20px;
+}
+
+.right-logo {
+  justify-content: flex-end;
+  margin-left: 20px;
+}
+
+.college-logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25));
+  transition: transform 0.3s ease;
+}
+
+.college-logo:hover {
+  transform: scale(1.05);
+}
+
+.alumni-logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 4px;
+  background: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+}
+
+.alumni-logo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(124, 58, 237, 0.5);
+}
+
+.center-title {
+  flex: 1;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.center-title h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #fffffff2;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 50%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.center-title .subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.center-title .user-email-info {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #ffffff;
+}
+
+.center-title .user-email-info .email-value {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Header Actions */
+.header-actions {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.header-back-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateX(-2px);
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+}
+
+.logout-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #fca5a5;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.logout-button:hover {
+  background: rgba(239, 68, 68, 0.35);
+  border-color: rgba(239, 68, 68, 0.5);
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+}
+
+.logout-button .logout-text {
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .center-title h1 {
+    font-size: 22px;
+  }
+  
+  .college-logo,
+  .alumni-logo {
+    height: 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    padding: 12px 16px;
+  }
+
+  .logo-container {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .left-logo {
+    margin-right: 10px;
+  }
+
+  .right-logo {
+    margin-left: 10px;
+  }
+
+  .college-logo,
+  .alumni-logo {
+    height: 40px;
+  }
+
+  .center-title {
+    flex: 0 0 100%;
+    order: 3;
+    padding: 4px 0;
+  }
+
+  .center-title h1 {
+    font-size: 18px;
+  }
+
+  .center-title .subtitle {
+    font-size: 12px;
+  }
+
+  .center-title .user-email-info {
+    font-size: 11px;
+  }
+
+  .header-actions {
+    position: static;
+    transform: none;
+    justify-content: center;
+    margin-top: 8px;
+    width: 100%;
+  }
+
+  .logout-button {
+    padding: 6px 14px;
+    font-size: 12px;
+  }
+
+  .header-back-btn {
+    padding: 6px 14px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header {
+    padding: 8px 12px;
+  }
+
+  .college-logo,
+  .alumni-logo {
+    height: 32px;
+  }
+
+  .center-title h1 {
+    font-size: 16px;
+  }
+
+  .center-title .subtitle {
+    font-size: 10px;
+  }
+
+  .center-title .user-email-info {
+    font-size: 10px;
+  }
+
+  .logout-button {
+    padding: 5px 12px;
+    font-size: 11px;
+  }
+
+  .header-back-btn {
+    padding: 5px 12px;
+    font-size: 11px;
+  }
+}

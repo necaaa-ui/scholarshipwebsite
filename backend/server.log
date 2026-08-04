@@ -1,0 +1,181 @@
+◇ injected env (3) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+🔄 Initializing application...
+🚀 Server running on http://localhost:5000
+📡 Test: http://localhost:5000/api/test
+📡 User: http://localhost:5000/api/user?email=test@example.com
+📡 Scholarship: http://localhost:5000/api/scholarship
+📡 Admin: http://localhost:5000/api/admin/applications
+📡 Admin Stats: http://localhost:5000/api/admin/stats
+📡 Admin All: http://localhost:5000/api/admin/applications/all
+📡 Student: http://localhost:5000/api/student/applications?email=test@example.com
+📊 Models Initialized: false
+✅ Test DB Connected: ac-3tyqngc-shard-00-00.jklwmpw.mongodb.net
+📁 Test Database: test
+✅ Scholarship DB Connected: undefined
+📁 Scholarship Database: undefined
+✅ Scholarship connection stored in app
+✅ Scholarship models initialized successfully
+📊 Scholarship model ready: true
+📊 FamilyMember model ready: true
+📊 ScholarshipDetail model ready: true
+✅ All connections and models initialized
+✅ Initialization complete
+📡 GET /api/student/applications?email=vsnithyasaminathan143%40gmail.com
+📡 Student applications request received
+📧 Email: vsnithyasaminathan143@gmail.com
+✅ Found 2 applications
+📊 Raw app data for arrears: {
+  arrearsDetails: { historyOfArrears: 'no', numberOfArrears: 0 },
+  eligibilityResult: {
+    hasArrears: false,
+    numberOfArrears: 0,
+    isEligible: true,
+    reasons: [],
+    totalParentIncome: 88000,
+    siblingIncome: 0,
+    cgpa: 8.5
+  }
+}
+📊 Arrears for SCH-1785646211933-595: hasArrears=false, numberOfArrears=0
+📊 Raw app data for arrears: {
+  arrearsDetails: { historyOfArrears: 'no', numberOfArrears: 0 },
+  eligibilityResult: {
+    hasArrears: false,
+    numberOfArrears: 0,
+    isEligible: true,
+    reasons: [],
+    totalParentIncome: 72000,
+    siblingIncome: 0,
+    cgpa: 8.5
+  }
+}
+📊 Arrears for SCH-1785645200046-9184: hasArrears=false, numberOfArrears=0
+📡 GET /api/student/applications?email=vsnithyasaminathan143%40gmail.com
+📡 Student applications request received
+📧 Email: vsnithyasaminathan143@gmail.com
+✅ Found 2 applications
+📊 Raw app data for arrears: {
+  arrearsDetails: { historyOfArrears: 'no', numberOfArrears: 0 },
+  eligibilityResult: {
+    hasArrears: false,
+    numberOfArrears: 0,
+    isEligible: true,
+    reasons: [],
+    totalParentIncome: 88000,
+    siblingIncome: 0,
+    cgpa: 8.5
+  }
+}
+📊 Arrears for SCH-1785646211933-595: hasArrears=false, numberOfArrears=0
+📊 Raw app data for arrears: {
+  arrearsDetails: { historyOfArrears: 'no', numberOfArrears: 0 },
+  eligibilityResult: {
+    hasArrears: false,
+    numberOfArrears: 0,
+    isEligible: true,
+    reasons: [],
+    totalParentIncome: 72000,
+    siblingIncome: 0,
+    cgpa: 8.5
+  }
+}
+📊 Arrears for SCH-1785645200046-9184: hasArrears=false, numberOfArrears=0
+📡 GET /api/student/applications?email=vsnithyasaminathan143%40gmail.com
+📡 Student applications request received
+📧 Email: vsnithyasaminathan143@gmail.com
+✅ Found 2 applications
+📊 Raw app data for arrears: {
+  arrearsDetails: { historyOfArrears: 'no', numberOfArrears: 0 },
+  eligibilityResult: {
+    hasArrears: false,
+    numberOfArrears: 0,
+    isEligible: true,
+    reasons: [],
+    totalParentIncome: 88000,
+    siblingIncome: 0,
+    cgpa: 8.5
+  }
+}
+📊 Arrears for SCH-1785646211933-595: hasArrears=false, numberOfArrears=0
+📊 Raw app data for arrears: {
+  arrearsDetails: { historyOfArrears: 'no', numberOfArrears: 0 },
+  eligibilityResult: {
+    hasArrears: false,
+    numberOfArrears: 0,
+    isEligible: true,
+    reasons: [],
+    totalParentIncome: 72000,
+    siblingIncome: 0,
+    cgpa: 8.5
+  }
+}
+📊 Arrears for SCH-1785645200046-9184: hasArrears=false, numberOfArrears=0
+📡 GET /api/user?email=vsnithyasaminathan143%40gmail.com
+🔍 Searching members collection for: vsnithyasaminathan143@gmail.com
+✅ FOUND USER: Nithya Sree
+📡 GET /api/user?email=vsnithyasaminathan143%40gmail.com
+🔍 Searching members collection for: vsnithyasaminathan143@gmail.com
+✅ FOUND USER: Nithya Sree
+📡 GET /api/user?email=vsnithyasaminathan143%40gmail.com
+🔍 Searching members collection for: vsnithyasaminathan143@gmail.com
+✅ FOUND USER: Nithya Sree
+📡 GET /api/student/applications?email=vsnithyasaminathan143%40gmail.com
+📡 Student applications request received
+📧 Email: vsnithyasaminathan143@gmail.com
+✅ Found 2 applications
+📊 Raw app data for arrears: {
+  arrearsDetails: { historyOfArrears: 'no', numberOfArrears: 0 },
+  eligibilityResult: {
+    hasArrears: false,
+    numberOfArrears: 0,
+    isEligible: true,
+    reasons: [],
+    totalParentIncome: 88000,
+    siblingIncome: 0,
+    cgpa: 8.5
+  }
+}
+📊 Arrears for SCH-1785646211933-595: hasArrears=false, numberOfArrears=0
+📊 Raw app data for arrears: {
+  arrearsDetails: { historyOfArrears: 'no', numberOfArrears: 0 },
+  eligibilityResult: {
+    hasArrears: false,
+    numberOfArrears: 0,
+    isEligible: true,
+    reasons: [],
+    totalParentIncome: 72000,
+    siblingIncome: 0,
+    cgpa: 8.5
+  }
+}
+📊 Arrears for SCH-1785645200046-9184: hasArrears=false, numberOfArrears=0
+📡 GET /api/student/applications?email=vsnithyasaminathan143%40gmail.com
+📡 Student applications request received
+📧 Email: vsnithyasaminathan143@gmail.com
+✅ Found 2 applications
+📊 Raw app data for arrears: {
+  arrearsDetails: { historyOfArrears: 'no', numberOfArrears: 0 },
+  eligibilityResult: {
+    hasArrears: false,
+    numberOfArrears: 0,
+    isEligible: true,
+    reasons: [],
+    totalParentIncome: 88000,
+    siblingIncome: 0,
+    cgpa: 8.5
+  }
+}
+📊 Arrears for SCH-1785646211933-595: hasArrears=false, numberOfArrears=0
+📊 Raw app data for arrears: {
+  arrearsDetails: { historyOfArrears: 'no', numberOfArrears: 0 },
+  eligibilityResult: {
+    hasArrears: false,
+    numberOfArrears: 0,
+    isEligible: true,
+    reasons: [],
+    totalParentIncome: 72000,
+    siblingIncome: 0,
+    cgpa: 8.5
+  }
+}
+📊 Arrears for SCH-1785645200046-9184: hasArrears=false, numberOfArrears=0
