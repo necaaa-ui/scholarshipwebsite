@@ -1988,8 +1988,12 @@ function AICTEFeeWaiverForm() {
 
 // Main App Component with Routing
 function App() {
+  // In production the scholarship app is served below /alumnimain.
+  // Keeping the basename conditional preserves the existing localhost routes for development.
+  const basename = window.location.pathname.startsWith('/alumnimain') ? '/alumnimain' : undefined;
+
   return (
-    <Router>
+    <Router basename={basename}>
       <div className="app-container">
         <Routes>
           {/* Main route - Student Dashboard */}
@@ -1998,7 +2002,7 @@ function App() {
           <Route path="/form" element={<AICTEFeeWaiverForm />} />
           {/* Admin route */}
           <Route path="/admin" element={<AdminDashboard />} />
-          {/* Alumni portal SSO route: /scholarship-dashboard?email=<base64-email> */}
+          {/* Production URL: /alumnimain/scholarship-dashboard?email=<base64-email> */}
           <Route path="/scholarship-dashboard" element={<ScholarshipSsoEntry />} />
           {/* Student dashboard with email */}
           <Route path="/student/:email" element={<StudentDashboard />} />
