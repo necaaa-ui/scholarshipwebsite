@@ -7,6 +7,76 @@ import "./App.css";
 import AdminDashboard from "./AdminDashboard";
 import StudentDashboard from './StudentDashboard';
 
+// Entry point used by the alumni portal. The `email` query parameter is Base64 encoded
+// by the portal, then checked against our existing user endpoint before navigation.
+function ScholarshipSsoEntry() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [message, setMessage] = useState('Signing you in...');
+
+  useEffect(() => {
+    let isActive = true;
+
+    const signInFromAlumniPortal = async () => {
+      const encodedEmail = new URLSearchParams(location.search).get('email');
+
+      if (!encodedEmail) {
+        if (isActive) setMessage('Login link is missing the email address. Please return to the alumni portal.');
+        return;
+      }
+
+      let email;
+      try {
+        // Support standard Base64 and URL-safe Base64 values.
+        let base64 = encodedEmail.trim().replace(/-/g, '+').replace(/_/g, '/');
+        base64 += '='.repeat((4 - (base64.length % 4)) % 4);
+        // Some portal implementations encode the email with encodeURIComponent
+        // before applying Base64, so accept both `name@nec.edu.in` and `name%40nec.edu.in`.
+        email = decodeURIComponent(atob(base64).trim());
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          throw new Error('Invalid email');
+        }
+      } catch {
+        if (isActive) setMessage('This login link is invalid. Please open the scholarship portal from the alumni website again.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:5000/api/user?email=${encodeURIComponent(email)}`);
+        const data = await response.json();
+
+        if (response.status === 404) {
+          throw new Error('You are not eligible for this scholarship dashboard. Only current 2nd year students can access it.');
+        }
+
+        if (!response.ok || !data.success || !data.user) {
+          throw new Error(data.message || 'User not found');
+        }
+
+        if (!isActive) return;
+
+        if (data.user.isAdmin) {
+          navigate('/admin', { replace: true });
+        } else {
+          navigate(`/student/${encodeURIComponent(data.user.email || email)}`, { replace: true });
+        }
+      } catch (error) {
+        if (isActive) setMessage(error.message || 'Unable to sign you in. Please try again from the alumni portal.');
+      }
+    };
+
+    signInFromAlumniPortal();
+    return () => { isActive = false; };
+  }, [location.search, navigate]);
+
+  return (
+    <div className="app-container" style={{ display: 'grid', minHeight: '100vh', placeItems: 'center' }}>
+      <p>{message}</p>
+    </div>
+  );
+}
+
 // Main Form Component
 function AICTEFeeWaiverForm() {
   const location = useLocation();
@@ -1928,6 +1998,8 @@ function App() {
           <Route path="/form" element={<AICTEFeeWaiverForm />} />
           {/* Admin route */}
           <Route path="/admin" element={<AdminDashboard />} />
+          {/* Alumni portal SSO route: /scholarship-dashboard?email=<base64-email> */}
+          <Route path="/scholarship-dashboard" element={<ScholarshipSsoEntry />} />
           {/* Student dashboard with email */}
           <Route path="/student/:email" element={<StudentDashboard />} />
         </Routes>
