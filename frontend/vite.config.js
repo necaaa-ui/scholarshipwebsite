@@ -6,4 +6,9 @@ export default defineConfig({
   // The production site is hosted at https://necalumni.nec.edu.in/alumnimain/
   base: '/alumnimain/',
   plugins: [react()],
+  server: {
+    proxy: {
+      '/api': 'http://localhost:5000'
+    }
+  }
 })

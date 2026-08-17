@@ -757,6 +757,7 @@ exports.getScholarshipStats = async (req, res) => {
 // ============================================
 exports.getAllApplications = async (req, res) => {
   try {
+    const { Scholarship } = getModels();
     const { status, page = 1, limit = 20, search } = req.query;
     
     // Build query
@@ -892,6 +893,7 @@ exports.getAllApplications = async (req, res) => {
 // ============================================
 exports.getApplicationById = async (req, res) => {
   try {
+    const { Scholarship } = getModels();
     const { id } = req.params;
     
     const application = await Scholarship.findById(id)
@@ -1045,6 +1047,7 @@ exports.getApplicationById = async (req, res) => {
 // ============================================
 exports.getDashboardStats = async (req, res) => {
   try {
+    const { Scholarship } = getModels();
     const total = await Scholarship.countDocuments();
     const pending = await Scholarship.countDocuments({ status: 'pending' });
     const approved = await Scholarship.countDocuments({ status: 'approved' });

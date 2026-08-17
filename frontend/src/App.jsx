@@ -43,7 +43,7 @@ function ScholarshipSsoEntry() {
       }
 
       try {
-        const response = await fetch(`http://localhost:5000/api/user?email=${encodeURIComponent(email)}`);
+        const response = await fetch(`/api/user?email=${encodeURIComponent(email)}`);
         const data = await response.json();
 
         if (response.status === 404) {
@@ -306,7 +306,7 @@ function AICTEFeeWaiverForm() {
         ? `email=${encodeURIComponent(trimmedValue)}` 
         : `registerNo=${encodeURIComponent(trimmedValue)}`;
       
-      const url = `http://localhost:5000/api/user?${queryParam}`;
+      const url = `/api/user?${queryParam}`;
       console.log(`📡 Fetching from URL:`, url);
       
       const response = await fetch(url);
@@ -928,7 +928,7 @@ function AICTEFeeWaiverForm() {
       
       console.log('📤 Sending data to backend:', scholarshipData);
       
-      const response = await fetch('http://localhost:5000/api/scholarship', {
+      const response = await fetch('/api/scholarship', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -73,7 +73,7 @@ export default function StudentDashboard() {
         return;
       }
 
-      const url = `http://localhost:5000/api/student/applications?email=${encodeURIComponent(email)}`;
+      const url = `/api/student/applications?email=${encodeURIComponent(email)}`;
       console.log('📡 Fetching from:', url);
       
       const response = await fetch(url);
@@ -81,7 +81,7 @@ export default function StudentDashboard() {
       
       console.log('📡 Response:', data);
 
-      if (data.success) {
+      if (response.ok && data.success) {
         // Process applications to ensure arrears data is properly extracted
         const processedApps = data.data.map(app => {
           // Extract arrears from multiple possible locations
@@ -112,8 +112,10 @@ export default function StudentDashboard() {
         navigate('/admin');
       } else if (response.status === 403) {
         setAccessDenied(data.message || 'Only current 2nd year students can access this dashboard.');
+      } else if (response.status === 503) {
+        setError(data.message || 'Service is starting up. Please refresh in a few seconds.');
       } else {
-        setError('Failed to fetch applications: ' + (data.message || 'Unknown error'));
+        setError(data.message || 'Failed to fetch applications. Please try again.');
       }
     } catch (err) {
       console.error('Error fetching applications:', err);
@@ -126,7 +128,7 @@ export default function StudentDashboard() {
   // Fetch application details
   const fetchApplicationDetails = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/student/application/${id}`);
+      const response = await fetch(`/api/student/application/${id}`);
       const data = await response.json();
       if (data.success) {
         // Process the selected app to ensure arrears data is properly extracted
@@ -264,7 +266,6 @@ export default function StudentDashboard() {
     }
   };
 
-  // Navigate to new application with email
   const handleNewApplication = () => {
     if (email) {
       navigate(`/form?email=${encodeURIComponent(email)}`);
@@ -324,6 +325,10 @@ export default function StudentDashboard() {
           <AlertOctagon size={48} color="#dc2626" />
           <h2>Not Eligible for Scholarship Dashboard</h2>
           <p>{accessDenied}</p>
+          <button className="btn btn-primary" onClick={goBack}>
+            <ArrowLeft size={16} />
+            Back to Application
+          </button>
         </div>
       </div>
     );
