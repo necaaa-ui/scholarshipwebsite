@@ -118,7 +118,14 @@ exports.getStudentApplications = async (req, res) => {
     const decodedEmail = decodeURIComponent(email);
     console.log('📧 Email:', decodedEmail);
 
-    const member = await findMemberByEmail(decodedEmail);
+    let member;
+    try {
+      member = await findMemberByEmail(decodedEmail);
+    } catch (memberError) {
+      console.error('⚠️ Error finding member (DB may be unreachable):', memberError.message);
+      member = null;
+    }
+    
     const isAdmin = member?.basic?.label?.trim().toLowerCase() === 'admin';
     const academicYear = getAcademicYearFromLabel(member?.basic?.label);
 
@@ -130,7 +137,7 @@ exports.getStudentApplications = async (req, res) => {
       });
     }
 
-    if (academicYear !== 2) {
+    if (academicYear !== null && academicYear !== 2) {
       return res.status(403).json({
         success: false,
         message: 'You are not eligible for this scholarship dashboard. Only current 2nd year students can access it.'
@@ -151,7 +158,7 @@ exports.getStudentApplications = async (req, res) => {
     }
 
     const applications = await Scholarship.find({ 
-      'personalDetails.email': { $regex: new RegExp(`^${decodedEmail}$`, 'i') }
+      'personalDetails.email': { $regex: new RegExp(`^${decodedEmail.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') }
     })
     .sort({ createdAt: -1 })
     .populate('familyMembers')
@@ -161,12 +168,12 @@ exports.getStudentApplications = async (req, res) => {
 
     let user = {
       personalDetails: {
-        name: member.basic?.name || 'Student',
-        email: member.basic?.email_id || decodedEmail,
-        mobileNumber: member.contact_details?.mobile || ''
+        name: member?.basic?.name || 'Student',
+        email: member?.basic?.email_id || decodedEmail,
+        mobileNumber: member?.contact_details?.mobile || ''
       },
       additionalPersonalDetails: {
-        department: member.basic?.label?.split(',')[1]?.trim() || '',
+        department: member?.basic?.label?.split(',')[1]?.trim() || '',
         year: '2nd Year'
       }
     };
@@ -408,7 +415,7 @@ exports.getStudentStats = async (req, res) => {
       });
     }
 
-    const decodedEmail = decodeURIComponent(email);
+    const decodedEmail = email;
     
     let Scholarship;
     try {
@@ -423,7 +430,7 @@ exports.getStudentStats = async (req, res) => {
     }
 
     const applications = await Scholarship.find({ 
-      'personalDetails.email': { $regex: new RegExp(`^${decodedEmail}$`, 'i') }
+      'personalDetails.email': { $regex: new RegExp(`^${decodedEmail.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') }
     });
 
     const total = applications.length;
@@ -433,7 +440,6 @@ exports.getStudentStats = async (req, res) => {
     const eligible = applications.filter(app => app.eligibilityResult?.isEligible === true).length;
     const notEligible = applications.filter(app => app.eligibilityResult?.isEligible === false).length;
     const hasArrears = applications.filter(app => {
-      // Check both locations for arrears
       const hasArrearsFromDetails = app.arrearsDetails?.historyOfArrears === 'yes';
       const hasArrearsFromResult = app.eligibilityResult?.hasArrears === true;
       return hasArrearsFromDetails || hasArrearsFromResult;
@@ -476,7 +482,7 @@ exports.checkStudentExists = async (req, res) => {
       });
     }
 
-    const decodedEmail = decodeURIComponent(email);
+    const decodedEmail = email;
     
     let Scholarship;
     try {
@@ -491,7 +497,7 @@ exports.checkStudentExists = async (req, res) => {
     }
 
     const application = await Scholarship.findOne({ 
-      'personalDetails.email': { $regex: new RegExp(`^${decodedEmail}$`, 'i') }
+      'personalDetails.email': { $regex: new RegExp(`^${decodedEmail.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') }
     });
 
     return res.status(200).json({

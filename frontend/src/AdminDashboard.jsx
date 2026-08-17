@@ -54,7 +54,7 @@ export default function AdminDashboard() {
   const fetchAllApplications = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/admin/applications/all', {
+      const response = await fetch('/api/admin/applications/all', {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -161,7 +161,7 @@ export default function AdminDashboard() {
   // Fetch application details
   const fetchApplicationDetails = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/application/${id}`);
+      const response = await fetch(`/api/admin/application/${id}`);
       const data = await response.json();
       if (data.success) {
         setSelectedApp(data.data);
@@ -177,7 +177,7 @@ export default function AdminDashboard() {
     if (!window.confirm(`Are you sure you want to change status to ${newStatus}?`)) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/scholarship/${id}/status`, {
+      const response = await fetch(`/api/scholarship/${id}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

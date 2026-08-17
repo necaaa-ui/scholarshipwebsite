@@ -25,10 +25,24 @@ exports.getUserByEmail = async (req, res) => {
     console.log("🔍 Searching members collection for:", email || registerNo);
 
     const searchValue = (email || registerNo).trim();
-    const searchField = email ? 'basic.email_id' : 'basic.register_no';
-    const user = await User.collection.findOne({
-      [searchField]: { $regex: new RegExp(`^${escapeRegex(searchValue)}$`, 'i') }
-    });
+    const regex = new RegExp(`^${escapeRegex(searchValue)}$`, 'i');
+
+    // Build a robust query that checks multiple possible email fields
+    let query;
+    if (email) {
+      query = {
+        $or: [
+          { 'basic.email_id': regex },
+          { 'basic.alternate_email_id': regex },
+          { 'basic.register_no': regex }
+        ]
+      };
+    } else {
+      query = { 'basic.register_no': regex };
+    }
+
+    console.log('📂 Querying members with:', JSON.stringify(query));
+    const user = await User.collection.findOne(query);
 
     if (!user) {
       console.log("❌ User NOT found for:", email || registerNo);
@@ -97,5 +111,30 @@ exports.getUserByEmail = async (req, res) => {
       success: false,
       message: "Server error while fetching user data"
     });
+  }
+};
+
+// Debug endpoint: return raw member document (only for development)
+exports.debugGetUser = async (req, res) => {
+  try {
+    const { email, registerNo } = req.query;
+    if (!email && !registerNo) {
+      return res.status(400).json({ success: false, message: 'Email or RegisterNo required' });
+    }
+
+    const searchValue = (email || registerNo).trim();
+    const regex = new RegExp(`^${escapeRegex(searchValue)}$`, 'i');
+
+    const query = email
+      ? { $or: [{ 'basic.email_id': regex }, { 'basic.alternate_email_id': regex }, { 'basic.register_no': regex }] }
+      : { 'basic.register_no': regex };
+
+    console.log('🐛 [DEBUG] Querying members with:', JSON.stringify(query));
+    const doc = await User.collection.findOne(query);
+    if (!doc) return res.status(404).json({ success: false, message: 'User not found (debug)' });
+    return res.json({ success: true, doc });
+  } catch (err) {
+    console.error('❌ Debug error:', err);
+    return res.status(500).json({ success: false, message: 'Server error (debug)' });
   }
 };

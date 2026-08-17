@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const path = require('path');
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -202,6 +204,13 @@ app.get('/api/test', (req, res) => {
 });
 
 // ============================================
+// STATIC FILES & SPA FALLBACK (Production)
+// ============================================
+
+const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
+app.use('/alumnimain', express.static(frontendDist));
+
+// ============================================
 // ROUTES
 // ============================================
 
@@ -224,6 +233,13 @@ app.use('/api', (req, res, next) => {
 app.use('/api', userRoutes);
 app.use('/api', scholarshipRoutes);
 app.use('/api', adminRoutes);
+
+// SPA fallback for client-side routing (production)
+if (process.env.NODE_ENV === 'production') {
+  app.get('/alumnimain/*', (req, res) => {
+    res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+}
 
 // ============================================
 // ERROR HANDLING
